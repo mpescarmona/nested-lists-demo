@@ -1,0 +1,67 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+#generated files
+bin/
+build/
+classes/
+target/
+out/
+generated/
+tmp/
+.metadata
+*.log
+*.gz
+TEMP/
+temp/
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+.sonar
+
+# Git
+*.patch
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Caches
+.sass-cache/
+.gradle/
+cobertura.ser
+.bundle/
+.gradletasknamecache
+
+# Others
+*.csv
+!src/test/resources/*
+
+# Ignored files
+input/
+output/
+
+#IntelliJ
+.gradle
+
+#Eclipse
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+.recommenders
+.externalToolBuilders/
+*.launch
+
+mb*.log
+mb.pid
+*.pid*
+derby.log
+.sonarlint/
