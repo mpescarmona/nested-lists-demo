@@ -1,11 +1,13 @@
 package com.mpescarmona.service;
 
+import com.mpescarmona.domain.Agent;
 import com.mpescarmona.domain.Nation;
 import com.mpescarmona.domain.Office;
 import com.mpescarmona.domain.Province;
 import com.mpescarmona.repository.NationRepository;
 import com.mpescarmona.repository.OfficeRepository;
 import com.mpescarmona.repository.ProvinceRepository;
+import com.mpescarmona.service.util.BaseHierarchyTree;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.mpescarmona.service.util.HierarchyTreeUtils.getNationOfAgentId;
@@ -24,7 +27,7 @@ import static com.mpescarmona.service.util.HierarchyTreeUtils.populateProvince;
 
 @Service
 @AllArgsConstructor
-public class StreamHierarchyTreeImpl implements HierarchyTree {
+public class StreamHierarchyTreeImpl extends BaseHierarchyTree implements HierarchyTree {
 
     @Autowired
     NationRepository nationRepository;
@@ -33,14 +36,18 @@ public class StreamHierarchyTreeImpl implements HierarchyTree {
     @Autowired
     OfficeRepository officeRepository;
 
-    public List<String> getHierarchyTree(Integer agentId) {
+    public List<String> getHierarchyTree() {
         List<Nation> nations = nationRepository.getAll();
         List<Province> provinces = provinceRepository.getAll();
         List<Office> offices = officeRepository.getAll();
 
-        Nation filteredNation = getNationOfAgentId(agentId, nations);
-        Province filteredProvince = getProvinceOfAgentId(agentId, provinces);
-        Office filteredOffice = getOfficeOfAgentId(agentId, offices);
+        Integer loggedAgentId = Optional.ofNullable(getLoggedAgent())
+                .map(Agent::getAgentId)
+                .orElse(null);
+
+        Nation filteredNation = getNationOfAgentId(loggedAgentId, nations);
+        Province filteredProvince = getProvinceOfAgentId(loggedAgentId, provinces);
+        Office filteredOffice = getOfficeOfAgentId(loggedAgentId, offices);
 
         if (filteredOffice != null) {
             provinces = provinces.stream()
